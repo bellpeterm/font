@@ -1,5 +1,3 @@
-require 'zip/zipfilesystem'
-
 def load_current_resource  
   @current_resource = Chef::Resource::Font.new(@new_resource.name)
   
@@ -10,11 +8,13 @@ def load_current_resource
     when "mac_os_x", "mac_os_x_server"
       "/Library/Fonts"
     when "windows"
-      "C:\Windows\Fonts"
+      "C:\\Windows\\Fonts"
   end
   
   if ::File.exist?("#{Chef::Config[:file_cache_path]}/#{zipfile}")
     list = Array.new
+
+    require 'zip/zipfilesystem'
     
     Zip::ZipFile.open("#{Chef::Config[:file_cache_path]}/#{zipfile}") do |zipfile|
       zipfile.each do |f|
@@ -43,7 +43,7 @@ action :install do
       when "mac_os_x", "mac_os_x_server"
         "/Library/Fonts"
       when "windows"
-        "C:\Windows\Fonts"
+        "C:\\Windows\\Fonts"
     end
     zipfile = "#{new_resource.name}.zip"
     
@@ -54,13 +54,23 @@ action :install do
     
     ruby_block "install_font" do
       block do
+        require 'zip/zipfilesystem'
         Zip::ZipFile.open("#{Chef::Config[:file_cache_path]}/#{zipfile}") do |zipfile|
           zipfile.each do |f|
-            zipfile.extract(f , "#{fontdir}/#{f.name}") if f.name.match(/\.(ttf|ttc|dfon|dfont|otf)/)
+            if f.name.match(/\.(ttf|ttc|dfon|dfont|otf)/) do
+              zipfile.extract(f , "#{fontdir}/#{f.name}") { true }
+            end
           end
         end
       end
+      end
       action :create
+    end
+  
+    execute "rebuild-windows-font-cache" do
+      command "#{ENV['windir']}\\system32\\FontReg.exe"
+      action :run
+      only_if { node['platform'] == "windows" }
     end
     
   end

@@ -12,7 +12,21 @@ This cookbook is currently tested on Ubuntu 12.04 and Mac OSX 11.8.  You need a 
 
 Attributes
 ----------
-None
+#### font::default
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Type</th>
+    <th>Description</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td><tt>['font']['font_reg_source']</tt></td>
+    <td>String</td>
+    <td>Download path of fontreg.exe, required for Windows</td>
+    <td><tt>nil</tt></td>
+  </tr>
+</table>
 
 Usage
 -----
@@ -31,4 +45,4 @@ Contributing
 
 License and Authors
 -------------------
-Authors: Peter Bell <pbell@whitepages.com>
+Authors: Peter Bell <bellpeterm@gmail.com>
