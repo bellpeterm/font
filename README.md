@@ -5,7 +5,9 @@ This cookbook provides an LWRP to download and install fonts from a given zip fi
 
 Requirements
 ------------
-This cookbook is currently tested on Ubuntu 12.04 and Mac OSX 11.8.  You need a zip file with the desired fonts in a location compatible with remote_file.
+This cookbook is currently tested on Ubuntu 12.04 and Mac OSX 11.8 and Windows7/8.  You need a zip file with the desired fonts in a location compatible with remote_file.
+
+The downloadable location of Fontreg.exe must be provided in the ['font']['font_reg_source'] attribute to support Windows.
 
 #### packages
 - `rubyzip` - needed to unzip files and test whether fonts are already installed
